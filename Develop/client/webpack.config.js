@@ -3,6 +3,9 @@ const WebpackPwaManifest = require('webpack-pwa-manifest');
 const path = require('path');
 const { InjectManifest } = require('workbox-webpack-plugin');
 
+// TODO: Add and configure workbox plugins for a service worker and manifest file.
+// TODO: Add CSS loaders and babel to webpack.
+
 module.exports = () => {
   return {
     mode: 'development',
@@ -16,33 +19,32 @@ module.exports = () => {
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: './index.html',
-        filename: 'index.html',
-        chunks: ['main']
+        template: "./index.html",
+        title: "JATE",
       }),
-      new HtmlWebpackPlugin({
-        template: './install.html',
-        filename: 'install.html',
-        chunks: ['install']
+      // injects our custom service work from src-sw.js
+      new InjectManifest({
+        swSrc: "./src-sw.js",
+        swDest: "src-sw.js",
       }),
+      // creates a manifest.json file
       new WebpackPwaManifest({
-        name: 'Edit Your Text',
-        short_name: 'EYT',
-        description: 'Edit Your Text is a versatile text editor web application that allows users to create, edit, and save content efficiently. It features a client-server folder structure, efficient bundling using Webpack, a generated HTML file, service worker, and a manifest file. The app supports next-gen JavaScript, has integrated IndexedDB for content storage, and can be installed as a desktop icon. It also features a registered service worker using Workbox, pre-caching of static assets, and deployment support on Heroku.',
-        background_color: '#ffffff',
-        crossorigin: 'use-credentials',
+        fingerprints: false,
+        inject: true,
+        name: "Just Another Text Editor",
+        short_name: "JATE",
+        description: "Text Editor with offline capabilities using IndexedDB",
+        background_color: "#225ca3",
+        theme_color: "#225ca3",
+        start_url: "/",
+        publicPath: "/",
         icons: [
           {
-            src: path.resolve(__dirname, 'src', 'images', 'logo.png'),
-            sizes: [96, 128, 192, 256, 384, 512],
-            destination: path.join('assets', 'icons')
+            src: path.resolve("src/images/logo.png"),
+            sizes: [96, 128, 192, 256, 384, 512], // multiple sizes
+            destination: path.join("assets", "icons"),
           },
         ],
-
-      }),
-      new InjectManifest({
-        swSrc: './src-sw.js',
-        swDest: 'sw.js',
       }),
     ],
 
@@ -50,21 +52,23 @@ module.exports = () => {
       rules: [
         {
           test: /\.css$/,
-          use: [
-            'style-loader',
-            'css-loader',
-          ],
+          use: ['style-loader', 'css-loader'],
         },
         {
-          test: /\.(js)$/,
+          test: /\.m?js$/,
           exclude: /node_modules/,
           use: {
-            loader: 'babel-loader',
+            loader: "babel-loader",
             options: {
-              presets: ['@babel/preset-env']
-            }
-          }
-        },
+              presets: ["@babel/preset-env"],
+              plugins: [
+                "@babel/plugin-proposal-object-rest-spread",
+                "@babel/transform-runtime",
+              ],
+            },
+          },
+        }
+        
       ],
     },
   };
