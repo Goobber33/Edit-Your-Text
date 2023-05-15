@@ -7,21 +7,21 @@ module.exports = () => {
   return {
     mode: 'development',
     entry: {
-      main: './client/src/js/index.js',
-      install: './client/src/js/install.js'
+      main: './src/js/index.js',
+      install: './src/js/install.js'
     },
     output: {
       filename: '[name].bundle.js',
-      path: path.resolve(__dirname, 'client', 'dist'),
+      path: path.resolve(__dirname, 'dist'),
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: './client/index.html',
+        template: './index.html',
         filename: 'index.html',
         chunks: ['main']
       }),
       new HtmlWebpackPlugin({
-        template: './client/install.html',
+        template: './install.html',
         filename: 'install.html',
         chunks: ['install']
       }),
@@ -33,14 +33,15 @@ module.exports = () => {
         crossorigin: 'use-credentials',
         icons: [
           {
-            src: path.resolve('client/src/assets/icon.png'),
+            src: path.resolve(__dirname, 'src', 'images', 'logo.png'),
             sizes: [96, 128, 192, 256, 384, 512],
             destination: path.join('assets', 'icons')
           },
         ],
+
       }),
       new InjectManifest({
-        swSrc: './client/src-sw.js',
+        swSrc: './src-sw.js',
         swDest: 'sw.js',
       }),
     ],
