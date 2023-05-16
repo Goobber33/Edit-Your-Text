@@ -57,12 +57,6 @@ Contributions are what make the open source community such an amazing place to b
 
 This project is licensed under the MIT License. See `LICENSE` for more information.
 
-## 📫 Contact 
-
-Your Name - your.email@example.com
-
-Project Link: [https://github.com/your_username/repo](https://github.com/your_username/repo)
-
 ## 🎉 Acknowledgements 
 
 - Starter code from [Coding Boot Camp](https://github.com/coding-boot-camp/cautious-meme)
