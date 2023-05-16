@@ -1,24 +1,29 @@
-const butInstall = document.getElementById('buttonInstall');
+const installButton = document.querySelector('#buttonInstall');
 
-// Logic for installing the PWA
-// TODO: Add an event handler to the `beforeinstallprompt` event
-window.addEventListener('beforeinstallprompt', (event) => {
-    window.deferredPrompt = event;
-  butInstall.classList.toggle("hidden", false);
+// Setup for installing the PWA
+// Add listener for the 'beforeinstallprompt' event
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Stash the event so it can be triggered later.
+    window.eventForLater = e;
+    installButton.classList.remove("hidden");
 });
 
-// TODO: Implement a click event handler on the `butInstall` element
-butInstall.addEventListener('click', async () => {
-    const promptEvent = window.deferredPrompt;
-  if (!promptEvent) {
-    return;
-  }
-  promptEvent.prompt();
-  window.deferredPrompt = null;
-  butInstall.classList.toggle("hidden", true);
+// Handle the click event on the installButton
+installButton.addEventListener('click', async () => {
+    const storedEvent = window.eventForLater;
+    // If there's no stored event, just return
+    if (!storedEvent) {
+        return;
+    }
+    // Otherwise, show the install prompt
+    storedEvent.prompt();
+    // We don't need the stored event anymore
+    window.eventForLater = null;
+    installButton.classList.add("hidden");
 });
 
-// TODO: Add an handler for the `appinstalled` event
-window.addEventListener('appinstalled', (event) => {
-    window.deferredPrompt = null;
+// Add a listener for the 'appinstalled' event
+window.addEventListener('appinstalled', (evt) => {
+    // We don't need the install prompt anymore
+    window.eventForLater = null;
 });
