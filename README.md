@@ -2,6 +2,11 @@
 
 J.A.T.E is a simple yet powerful text editor that comes with offline capabilities using IndexedDB. It is perfect for quick note-taking, coding on the go, or jotting down ideas when you're offline. 🚀
 
+![Node.js](https://img.shields.io/static/v1?style=for-the-badge&message=Node.js&color=339933&logo=Node.js&logoColor=FFFFFF&label=)
+![Express.js](https://img.shields.io/static/v1?style=for-the-badge&message=Express.js&color=000000&logo=Express&logoColor=FFFFFF&label=)
+![Webpack](https://img.shields.io/static/v1?style=for-the-badge&message=Webpack&color=8DD6F9&logo=Webpack&logoColor=FFFFFF&label=)
+![JavaScript](https://img.shields.io/static/v1?style=for-the-badge&message=JavaScript&color=F7DF1E&logo=JavaScript&logoColor=000000&label=)
+
 ## 💡 Features 
 
 - Simple, clean interface for distraction-free writing
