@@ -1,15 +1,15 @@
-import { getDb, putDb } from './database';
-import { header } from './header';
+import { retrieveFromDb, saveToDb } from './dbOperations';
+import { defaultText } from './introText';
 
-export default class {
+export default class Editor {
   constructor() {
-    const localData = localStorage.getItem('content');
+    const savedLocalData = localStorage.getItem('editorContent');
 
     if (typeof CodeMirror === 'undefined') {
-      throw new Error('CodeMirror is not loaded');
+      throw new Error('CodeMirror library is not loaded');
     }
 
-    this.editor = CodeMirror(document.querySelector('#main'), {
+    this.codeEditor = CodeMirror(document.querySelector('#editor'), {
       value: '',
       mode: 'javascript',
       theme: 'monokai',
@@ -20,22 +20,19 @@ export default class {
       tabSize: 2,
     });
 
-    // When the editor is ready, set the value to whatever is stored in indexeddb.
-    // Fall back to localStorage if nothing is stored in indexeddb, and if neither is available, set the value to header.
-    getDb().then((data) => {
-      console.info('Loaded data from IndexedDB, injecting into editor');
-      const editorContent = data.length > 0 ? data[0].jate : null;
-      this.editor.setValue(editorContent || localData || header);
-    });    
-
-    this.editor.on('change', () => {
-      localStorage.setItem('content', this.editor.getValue());
+    retrieveFromDb().then((dbData) => {
+      console.info('Fetched data from IndexedDB, injecting into editor');
+      const dbContent = dbData.length > 0 ? dbData[0].jate : null;
+      this.codeEditor.setValue(dbContent || savedLocalData || defaultText);
     });
 
-    // Save the content of the editor when the editor itself is loses focus
-    this.editor.on('blur', () => {
-      console.log('The editor has lost focus');
-      putDb(localStorage.getItem('content'));
+    this.codeEditor.on('change', () => {
+      localStorage.setItem('editorContent', this.codeEditor.getValue());
+    });
+
+    this.codeEditor.on('blur', () => {
+      console.log('The code editor has lost focus');
+      saveToDb(localStorage.getItem('editorContent'));
     });
   }
 }
